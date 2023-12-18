@@ -1,1 +1,12 @@
- 
+ .infowindow img{
+    flex-grow: 1;
+    flex: 1;
+ }
+
+ .infoWindow{
+    width:100%;
+    height:100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+ }
