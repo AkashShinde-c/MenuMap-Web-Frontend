@@ -11,7 +11,7 @@ import axios from "axios";
 import api from "../api/api";
 
 const MapView = () => {
-  const apiKey = "AIzaSyDPEAGbAfP-gnmnziEPebB340EQ6J9at9M";
+  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
   const [position, setPosition] = useState({ lat: 18.645685, lng: 73.76658 });
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [markers, setMarkers] = useState([{}]);
@@ -35,6 +35,17 @@ const MapView = () => {
       }
     })();
   }, []);
+
+  const mapOptions = {
+    disableDefaultUI: true,  
+    styles: [
+      {
+        featureType: 'poi',
+        elementType: 'labels',
+        stylers: [{ visibility: 'off' }],  
+      },
+    ],
+  };
 
   const loadImage = async (marker) => {
     try {
@@ -63,6 +74,7 @@ const MapView = () => {
         mapContainerStyle={{ width: "100%", height: "100%" }}
         center={position}
         zoom={14}
+        options={mapOptions}
       >
         {markers &&
           markers.map((marker) => (
