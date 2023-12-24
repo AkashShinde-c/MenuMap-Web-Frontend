@@ -11,7 +11,7 @@ import axios from "axios";
 import api from "../api/api";
 
 const MapView = () => {
-  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const apiKey =  process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
   const [position, setPosition] = useState({ lat: 18.645685, lng: 73.76658 });
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [markers, setMarkers] = useState([{}]);
@@ -84,6 +84,18 @@ const MapView = () => {
               position={{
                 lat: parseFloat(marker.location?.lat),
                 lng: parseFloat(marker.location?.lng),
+              }}
+              // label={"Athavan"}
+              icon={{
+                url:  'https://maps.google.com/mapfiles/kml/paddle/red-blank.png', 
+                scaledSize: new window.google.maps.Size(35, 35),  
+              }}
+              label={{
+                text: marker.mess_name,
+                color: 'black',
+                fontSize: '10px',  
+                fontWeight: 'bold',  
+                
               }}
               draggable={false}
             />
