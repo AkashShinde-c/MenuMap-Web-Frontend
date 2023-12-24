@@ -11,11 +11,12 @@ import axios from "axios";
 import api from "../api/api";
 
 const MapView = () => {
-  const apiKey =  process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const apiKey =  process.env.REACT_APP_MAPS_API_KEY;
   const [position, setPosition] = useState({ lat: 18.645685, lng: 73.76658 });
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [markers, setMarkers] = useState([{}]);
   const [menu, setMenu] = useState("");
+  const [pinSize, setPinSize] = useState();
 
   const onMarkerClick = () => {
     setInfoWindowOpen(!infoWindowOpen);
@@ -30,11 +31,17 @@ const MapView = () => {
         const response = await api.get("/get-menu-data");
         console.log(response.data.menu_data);
         setMarkers(response.data.menu_data);
+         setTimeout(async() =>{
+          const ps = await new window.google.maps.Size(35, 35);
+          setPinSize(ps)
+         },50)
+         
+        
       } catch (error) {
-        alert("Somthing went wrong");
+        alert(error.message);
       }
     })();
-  }, []);
+  }, [window.google]);
 
   const mapOptions = {
     disableDefaultUI: true,  
@@ -88,7 +95,7 @@ const MapView = () => {
               // label={"Athavan"}
               icon={{
                 url:  'https://maps.google.com/mapfiles/kml/paddle/red-blank.png', 
-                scaledSize: new window.google.maps.Size(35, 35),  
+                scaledSize: pinSize,  
               }}
               label={{
                 text: marker.mess_name,
