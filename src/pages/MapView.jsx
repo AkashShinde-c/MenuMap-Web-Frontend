@@ -11,7 +11,7 @@ import axios from "axios";
 import api from "../api/api";
 
 const MapView = () => {
-  const apiKey = "AIzaSyDPEAGbAfP-gnmnziEPebB340EQ6J9at9M";
+  const apiKey = ;
   const [position, setPosition] = useState({ lat: 18.645685, lng: 73.76658 });
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [markers, setMarkers] = useState([{}]);
