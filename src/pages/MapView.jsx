@@ -11,12 +11,12 @@ import axios from "axios";
 import api from "../api/api";
 
 const MapView = () => {
-  const apiKey =  process.env.REACT_APP_MAPS_API_KEY;
+  const apiKey = "AIzaSyDPEAGbAfP-gnmnziEPebB340EQ6J9at9M";
   const [position, setPosition] = useState({ lat: 18.645685, lng: 73.76658 });
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [markers, setMarkers] = useState([{}]);
   const [menu, setMenu] = useState("");
-  const [pinSize, setPinSize] = useState();
+  
 
   const onMarkerClick = () => {
     setInfoWindowOpen(!infoWindowOpen);
@@ -31,12 +31,7 @@ const MapView = () => {
         const response = await api.get("/get-menu-data");
         console.log(response.data.menu_data);
         setMarkers(response.data.menu_data);
-         setTimeout(async() =>{
-          const ps = await new window.google.maps.Size(35, 35);
-          setPinSize(ps)
-         },50)
-         
-        
+   
       } catch (error) {
         alert(error.message);
       }
@@ -47,7 +42,7 @@ const MapView = () => {
     disableDefaultUI: true,  
     styles: [
       {
-        featureType: 'poi',
+        // featureType: 'poi',
         elementType: 'labels',
         stylers: [{ visibility: 'off' }],  
       },
@@ -95,7 +90,10 @@ const MapView = () => {
               // label={"Athavan"}
               icon={{
                 url:  'https://maps.google.com/mapfiles/kml/paddle/red-blank.png', 
-                scaledSize: pinSize,  
+                scaledSize: {
+                  "width": 30,
+                  "height": 30
+              },  
               }}
               label={{
                 text: marker.mess_name,
@@ -113,7 +111,7 @@ const MapView = () => {
             onCloseClick={() => setInfoWindowOpen(false)}
             
           >
-            <div className="infoWindow">
+            <div className="infoWindow"> 
               <h3>Todays Menu</h3>
               <img src={menu} alt="" />
             </div>
