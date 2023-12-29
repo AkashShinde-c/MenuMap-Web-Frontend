@@ -4,6 +4,7 @@ import {
   LoadScript,
   Marker,
   InfoWindow,
+  useJsApiLoader
 } from "@react-google-maps/api";
 import img from "../assets/react.svg";
 import "../css/MapView.css";
@@ -11,12 +12,16 @@ import axios from "axios";
 import api from "../api/api";
 
 const MapView = () => {
-  const apiKey = ;
+  const apiKey = "";
   const [position, setPosition] = useState({ lat: 18.645685, lng: 73.76658 });
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [markers, setMarkers] = useState([{}]);
   const [menu, setMenu] = useState("");
   
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey:  
+  })
 
   const onMarkerClick = () => {
     setInfoWindowOpen(!infoWindowOpen);
@@ -70,8 +75,8 @@ const MapView = () => {
       alert("Somthing went wrong");
     }
   };
-  return (
-    <LoadScript googleMapsApiKey={apiKey}>
+  return isLoaded?(
+    
       <GoogleMap
         mapContainerStyle={{ width: "100%", height: "100%" }}
         center={position}
@@ -103,6 +108,7 @@ const MapView = () => {
                 
               }}
               draggable={false}
+              animation={google.maps.Animation.DROP}
             />
           ))}
         {infoWindowOpen && (
@@ -118,8 +124,10 @@ const MapView = () => {
           </InfoWindow>
         )}
       </GoogleMap>
-    </LoadScript>
-  );
+    
+  ):(<>
+    Wait a moment
+  </>);
 };
 
 export default MapView;
