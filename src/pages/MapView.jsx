@@ -4,7 +4,7 @@ import {
   LoadScript,
   Marker,
   InfoWindow,
-  useJsApiLoader
+  useJsApiLoader,
 } from "@react-google-maps/api";
 import img from "../assets/react.svg";
 import "../css/MapView.css";
@@ -17,11 +17,11 @@ const MapView = () => {
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [markers, setMarkers] = useState([{}]);
   const [menu, setMenu] = useState("");
-  
+
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey:  
-  })
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyDPEAGbAfP-",
+  });
 
   const onMarkerClick = () => {
     setInfoWindowOpen(!infoWindowOpen);
@@ -36,7 +36,6 @@ const MapView = () => {
         const response = await api.get("/get-menu-data");
         console.log(response.data.menu_data);
         setMarkers(response.data.menu_data);
-   
       } catch (error) {
         alert(error.message);
       }
@@ -44,90 +43,91 @@ const MapView = () => {
   }, [window.google]);
 
   const mapOptions = {
-    disableDefaultUI: true,  
-    styles: [
+    disableDefaultUI: true,
+    mapId:'43e761c16c55b930',
+    styles:[
       {
-        // featureType: 'poi',
+        featureType: 'poi',
         elementType: 'labels',
-        stylers: [{ visibility: 'off' }],  
-      },
-    ],
+        stylers:[{visibility: 'off'}]
+      }
+    ]
+
   };
 
   const loadImage = async (marker) => {
     try {
-      console.log(marker)
+      console.log(marker);
       if (!marker.menu_image_url) {
         alert("Menu not updated");
         return;
       }
 
-      const response = await api.get(`/get-image-url?img_name=${marker.menu_image_url}`);
+      const response = await api.get(
+        `/get-image-url?img_name=${marker.menu_image_url}`
+      );
       const awsresponse = await axios.get(response.data.url);
       const base64String = awsresponse.data;
       setMenu(`data:image/jpeg;base64,${base64String}`);
       setPosition({
         lat: parseFloat(marker.location?.lat),
         lng: parseFloat(marker.location?.lng),
-      })
+      });
       setInfoWindowOpen(!infoWindowOpen);
     } catch (error) {
       alert("Somthing went wrong");
     }
   };
-  return isLoaded?(
+  return isLoaded ? (
+    <GoogleMap
+      mapContainerStyle={{ width: "100%", height: "100%" }}
+      center={{lat:18.645732400587775,lng:73.76579150007586}}
+      zoom={17.6}
+      options={mapOptions}
     
-      <GoogleMap
-        mapContainerStyle={{ width: "100%", height: "100%" }}
-        center={position}
-        zoom={14}
-        options={mapOptions}
-      >
-        {markers &&
-          markers.map((marker) => (
-            <Marker
-              key={marker._id}
-              onClick={() => loadImage(marker)}
-              position={{
-                lat: parseFloat(marker.location?.lat),
-                lng: parseFloat(marker.location?.lng),
-              }}
-              // label={"Athavan"}
-              icon={{
-                url:  'https://maps.google.com/mapfiles/kml/paddle/red-blank.png', 
-                scaledSize: {
-                  "width": 30,
-                  "height": 30
-              },  
-              }}
-              label={{
-                text: marker.mess_name,
-                color: 'black',
-                fontSize: '10px',  
-                fontWeight: 'bold',  
-                
-              }}
-              draggable={false}
-              animation={google.maps.Animation.DROP}
-            />
-          ))}
-        {infoWindowOpen && (
-          <InfoWindow
-            position={position}
-            onCloseClick={() => setInfoWindowOpen(false)}
-            
-          >
-            <div className="infoWindow"> 
-              <h3>Todays Menu</h3>
-              <img src={menu} alt="" />
-            </div>
-          </InfoWindow>
-        )}
-      </GoogleMap>
-    
-  ):(<>
-    Wait a moment
-  </>);
+    >
+      {markers &&
+        markers.map((marker) => (
+          <Marker
+            key={marker._id}
+            onClick={() => loadImage(marker)}
+            position={{
+              lat: parseFloat(marker.location?.lat),
+              lng: parseFloat(marker.location?.lng),
+            }}
+            // label={"Athavan"}
+            icon={{
+              url: "https://maps.google.com/mapfiles/kml/paddle/red-blank.png",
+              scaledSize: {
+                width: 30,
+                height: 30,
+              },
+            }}
+            label={{
+              text: marker.mess_name,
+              color: "black",
+              fontSize: "10px",
+              fontWeight: "bold",
+            }}
+            draggable={false}
+            animation={google.maps.Animation.DROP}
+          />
+        ))}
+      {infoWindowOpen && (
+        <InfoWindow
+          position={position}
+          onCloseClick={() => setInfoWindowOpen(false)}
+        >
+          <div className="infoWindow">
+            <h3>Todays Menu</h3>
+            <img src={menu} alt="" />
+          </div>
+        </InfoWindow>
+      )}
+    </GoogleMap>
+  ) : (
+    <>Wait a moment</>
+  );
 };
 
 export default MapView;
