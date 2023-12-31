@@ -10,17 +10,18 @@ import img from "../assets/react.svg";
 import "../css/MapView.css";
 import axios from "axios";
 import api from "../api/api";
+import mark from "../assets/mark.svg"
 
 const MapView = () => {
   const apiKey = "";
-  const [position, setPosition] = useState({ lat: 18.645685, lng: 73.76658 });
+  const [position, setPosition] = useState({ lat:18.645732400587775,lng:73.76579150007586 });
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [markers, setMarkers] = useState([{}]);
   const [menu, setMenu] = useState("");
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyDPEAGbAfP-",
+    googleMapsApiKey: "AIzaSyDPEAGbAfP-gnmnziEPebB340EQ6J9at9M",
   });
 
   const onMarkerClick = () => {
@@ -81,7 +82,7 @@ const MapView = () => {
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={{ width: "100%", height: "100%" }}
-      center={{lat:18.645732400587775,lng:73.76579150007586}}
+      center={position}
       zoom={17.6}
       options={mapOptions}
     
@@ -97,7 +98,7 @@ const MapView = () => {
             }}
             // label={"Athavan"}
             icon={{
-              url: "https://maps.google.com/mapfiles/kml/paddle/red-blank.png",
+              url:mark,
               scaledSize: {
                 width: 30,
                 height: 30,
@@ -108,6 +109,8 @@ const MapView = () => {
               color: "black",
               fontSize: "10px",
               fontWeight: "bold",
+              position: "absolute",
+              
             }}
             draggable={false}
             animation={google.maps.Animation.DROP}

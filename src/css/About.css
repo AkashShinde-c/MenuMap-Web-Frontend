@@ -10,16 +10,17 @@
     display: flex;
     /* align-items: center; */
     justify-content: center;   
+    transition: all 0.2s;
 }
 
 .text-area {
     background-color: white;
-    width: 100%;
+    width: 90%;
     position: relative;
-    /* top: 10%; */
-    height: 100%;
+    top: 4%;
+    height: 90%;
     box-sizing: border-box;
-    padding:2rem;
+    padding:1.9rem;
     overflow-y: auto;
     scroll-behavior: smooth;
     border-radius: 10px;
@@ -41,5 +42,15 @@
 }
 
 .about-hide{
-    display: none;
+    /* display: none; */
+    opacity: 0;
+    transition: all 0.2s;
+}
+
+.text{
+    text-align: justify;
+}
+
+.text h1{
+    text-align: left;
 }

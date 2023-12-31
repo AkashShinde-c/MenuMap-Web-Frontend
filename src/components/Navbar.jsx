@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import "../css/Navbar.css";
 import logo from "../assets/logo.svg";
+import logo_round from "../assets/logo_round.svg";
 import home from "../assets/home.svg";
 import contact from "../assets/contact.svg";
 import about from "../assets/about.png";
@@ -20,7 +21,8 @@ const Navbar = () => {
       {showAbout&&<About/>}
       <div className="left-nav">
         <div className="logo">
-          <img src={logo} alt="logo" />
+          <img src={logo_round} alt="logo" />
+          <span>Menu Map</span>
         </div>
       </div>
       <div className="right-nav">
