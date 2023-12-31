@@ -21,7 +21,7 @@ const MapView = () => {
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyDPEAGbAfP-gnmnziEPebB340EQ6J9at9M",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
   });
 
   const onMarkerClick = () => {
