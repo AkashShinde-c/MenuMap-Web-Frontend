@@ -18,6 +18,7 @@ const MapView = () => {
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [markers, setMarkers] = useState([{}]);
   const [menu, setMenu] = useState("");
+  const [currentLocation, setCurrentLocation] = useState(null);
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -41,10 +42,23 @@ const MapView = () => {
         alert(error.message);
       }
     })();
+
+     // Use Geolocation API to get the user's current position
+     navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCurrentLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.error("Error getting user's location:", error);
+      }
+    );
   }, [window.google]);
 
   const mapOptions = {
-    gestureHandling: "cooperative",
+    gestureHandling: "greedy",
     disableDefaultUI: true,
     mapId:'43e761c16c55b930',
     styles:[
@@ -117,6 +131,9 @@ const MapView = () => {
             animation={google.maps.Animation.DROP}
           />
         ))}
+         {currentLocation && (
+          <Marker position={currentLocation} title="Current Location" />
+        )}
       {infoWindowOpen && (
         <InfoWindow
           position={position}
