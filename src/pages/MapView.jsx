@@ -44,6 +44,7 @@ const MapView = () => {
   }, [window.google]);
 
   const mapOptions = {
+    gestureHandling: "cooperative",
     disableDefaultUI: true,
     mapId:'43e761c16c55b930',
     styles:[
