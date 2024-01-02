@@ -10,11 +10,15 @@ import img from "../assets/react.svg";
 import "../css/MapView.css";
 import axios from "axios";
 import api from "../api/api";
-import mark from "../assets/mark.svg"
+import mark from "../assets/mark.svg";
+import current from '../assets/current.svg';
 
 const MapView = () => {
   const apiKey = "";
-  const [position, setPosition] = useState({ lat:18.645732400587775,lng:73.76579150007586 });
+  const [position, setPosition] = useState({
+    lat: 18.645732400587775,
+    lng: 73.76579150007586,
+  });
   const [infoWindowOpen, setInfoWindowOpen] = useState(false);
   const [markers, setMarkers] = useState([{}]);
   const [menu, setMenu] = useState("");
@@ -43,8 +47,8 @@ const MapView = () => {
       }
     })();
 
-     // Use Geolocation API to get the user's current position
-     navigator.geolocation.getCurrentPosition(
+    // Use Geolocation API to get the user's current position
+    const watchId = navigator.geolocation.watchPosition(
       (position) => {
         setCurrentLocation({
           lat: position.coords.latitude,
@@ -60,15 +64,14 @@ const MapView = () => {
   const mapOptions = {
     gestureHandling: "greedy",
     disableDefaultUI: true,
-    mapId:'43e761c16c55b930',
-    styles:[
+    mapId: "43e761c16c55b930",
+    styles: [
       {
-        featureType: 'poi',
-        elementType: 'labels',
-        stylers:[{visibility: 'off'}]
-      }
-    ]
-
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [{ visibility: "off" }],
+      },
+    ],
   };
 
   const loadImage = async (marker) => {
@@ -100,7 +103,6 @@ const MapView = () => {
       center={position}
       zoom={17.6}
       options={mapOptions}
-    
     >
       {markers &&
         markers.map((marker) => (
@@ -113,7 +115,7 @@ const MapView = () => {
             }}
             // label={"Athavan"}
             icon={{
-              url:mark,
+              url: mark,
               scaledSize: {
                 width: 30,
                 height: 30,
@@ -125,15 +127,23 @@ const MapView = () => {
               fontSize: "10px",
               fontWeight: "bold",
               position: "absolute",
-              
             }}
             draggable={false}
             animation={google.maps.Animation.DROP}
           />
         ))}
-         {currentLocation && (
-          <Marker position={currentLocation} title="Current Location" />
-        )}
+      {currentLocation && (
+        <Marker
+          position={currentLocation}
+          title="Live Location"
+          icon={{
+            url: current,
+            scaledSize: new window.google.maps.Size(50, 50),
+            origin: new window.google.maps.Point(0, 0),
+            anchor: new window.google.maps.Point(25, 25),
+          }}
+        />
+      )}
       {infoWindowOpen && (
         <InfoWindow
           position={position}
