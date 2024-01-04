@@ -1,0 +1,13 @@
+.loader{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    /* background-color:#4AB3FF; */
+    justify-content: center;
+}
+
+ 

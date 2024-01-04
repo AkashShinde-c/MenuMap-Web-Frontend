@@ -11,7 +11,8 @@ import "../css/MapView.css";
 import axios from "axios";
 import api from "../api/api";
 import mark from "../assets/mark.svg";
-import current from '../assets/current.svg';
+import current from "../assets/current.svg";
+import Loader from "../components/Loader";
 
 const MapView = () => {
   const apiKey = "";
@@ -23,6 +24,7 @@ const MapView = () => {
   const [markers, setMarkers] = useState([{}]);
   const [menu, setMenu] = useState("");
   const [currentLocation, setCurrentLocation] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -76,7 +78,7 @@ const MapView = () => {
 
   const loadImage = async (marker) => {
     try {
-      console.log(marker);
+       setIsLoading(true);
       if (!marker.menu_image_url) {
         alert("Menu not updated");
         return;
@@ -96,14 +98,19 @@ const MapView = () => {
     } catch (error) {
       alert("Somthing went wrong");
     }
+    finally{
+      setIsLoading(false);
+    }
   };
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={{ width: "100%", height: "100%" }}
       center={position}
+      // center={currentLocation}
       zoom={17.6}
       options={mapOptions}
     >
+     {isLoading && <Loader></Loader>}
       {markers &&
         markers.map((marker) => (
           <Marker
@@ -126,7 +133,8 @@ const MapView = () => {
               color: "black",
               fontSize: "10px",
               fontWeight: "bold",
-              position: "absolute",
+              backgroundColor: "black",
+              padding:'10px'
             }}
             draggable={false}
             animation={google.maps.Animation.DROP}
@@ -138,9 +146,15 @@ const MapView = () => {
           title="Live Location"
           icon={{
             url: current,
-            scaledSize: new window.google.maps.Size(30, 30),
-            origin: new window.google.maps.Point(0, 0),
-            anchor: new window.google.maps.Point(25, 25),
+            scaledSize: {
+              width: 30,
+              height: 30,
+            },
+
+            anchor: {
+              x: 30,
+              y: 30,
+            },
           }}
         />
       )}
@@ -157,7 +171,7 @@ const MapView = () => {
       )}
     </GoogleMap>
   ) : (
-    <>Wait a moment</>
+    <Loader></Loader>
   );
 };
 
