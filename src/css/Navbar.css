@@ -1,7 +1,7 @@
 .navbar-custom {
     position: sticky;
     top: 0;
-  height: 5rem;
+  height: 3.5rem;
   background-color: #27005D;
   display: grid;
   grid-template-columns: 50% 50%;
@@ -24,7 +24,7 @@
   /* justify-content: flex-end; */
   align-items: flex-end;
   box-sizing: border-box;
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 
 .ham-burger {
@@ -128,7 +128,7 @@
   .menu-show {
     position: absolute;
      
-    top: 4.5rem;
+    top: 3rem;
     background-color: #27005D;
     background-color: transparent;
     height: 30vh;

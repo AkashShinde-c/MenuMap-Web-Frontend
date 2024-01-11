@@ -28,7 +28,7 @@ const Navbar = () => {
       </div>
       <div className="right-nav">
         
-        <label className="btn btn-circle swap swap-rotate bg-#9400FF">
+        <label className="btn btn-circle btn-sm  swap swap-rotate bg-#9400FF">
           {/* this hidden checkbox controls the state */}
           <input type="checkbox" onClick={toggleMenu} ref={chceckboxRef}/>
 
