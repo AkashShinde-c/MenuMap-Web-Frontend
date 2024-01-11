@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   GoogleMap,
   LoadScript,
   Marker,
   InfoWindow,
   useJsApiLoader,
+  OverlayView,
 } from "@react-google-maps/api";
 import img from "../assets/react.svg";
 import "../css/MapView.css";
@@ -13,6 +14,7 @@ import api from "../api/api";
 import mark from "../assets/mark.svg";
 import current from "../assets/current.svg";
 import Loader from "../components/Loader";
+import MarkerLabel from "../components/MarkerLabel";
 
 const MapView = () => {
   const apiKey = "";
@@ -66,7 +68,7 @@ const MapView = () => {
   const mapOptions = {
     gestureHandling: "greedy",
     disableDefaultUI: true,
-    mapId: "43e761c16c55b930",
+    // mapId: "43e761c16c55b930",
     styles: [
       {
         featureType: "poi",
@@ -78,7 +80,7 @@ const MapView = () => {
 
   const loadImage = async (marker) => {
     try {
-       setIsLoading(true);
+      setIsLoading(true);
       if (!marker.menu_image_url) {
         alert("Menu not updated");
         return;
@@ -97,8 +99,7 @@ const MapView = () => {
       setInfoWindowOpen(!infoWindowOpen);
     } catch (error) {
       alert("Somthing went wrong");
-    }
-    finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -110,35 +111,46 @@ const MapView = () => {
       zoom={17.6}
       options={mapOptions}
     >
-     {isLoading && <Loader></Loader>}
+      {isLoading && <Loader></Loader>}
       {markers &&
         markers.map((marker) => (
-          <Marker
-            key={marker._id}
-            onClick={() => loadImage(marker)}
-            position={{
-              lat: parseFloat(marker.location?.lat),
-              lng: parseFloat(marker.location?.lng),
-            }}
-            // label={"Athavan"}
-            icon={{
-              url: mark,
-              scaledSize: {
-                width: 30,
-                height: 30,
-              },
-            }}
-            label={{
-              text: marker.mess_name,
-              color: "black",
-              fontSize: "10px",
-              fontWeight: "bold",
-              backgroundColor: "black",
-              padding:'10px'
-            }}
-            draggable={false}
-            animation={google.maps.Animation.DROP}
-          />
+          <Fragment key={marker._id}>
+            <Marker
+              key={marker._id}
+              onClick={() => loadImage(marker)}
+              position={{
+                lat: parseFloat(marker.location?.lat),
+                lng: parseFloat(marker.location?.lng),
+              }}
+              // label={"Athavan"}
+              icon={{
+                url: mark,
+                scaledSize: {
+                  width: 30,
+                  height: 30,
+                },
+              }}
+              // label={{
+              //   text: marker.mess_name,
+              //   color: "black",
+              //   fontSize: "10px",
+              //   fontWeight: "bold",
+              //   backgroundColor: "black",
+              //   padding:'10px'
+              // }}
+              draggable={false}
+              animation={google.maps.Animation.DROP}
+            />
+            <OverlayView
+              position={{
+                lat: parseFloat(marker.location?.lat),
+                lng: parseFloat(marker.location?.lng),
+              }}
+              mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+            >
+              <MarkerLabel text={marker.mess_name} />
+            </OverlayView>
+          </Fragment>
         ))}
       {currentLocation && (
         <Marker
@@ -169,6 +181,17 @@ const MapView = () => {
           </div>
         </InfoWindow>
       )}
+      <div className="btm-nav">
+  <button className="bg-secondary text-base-100">
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+    <span className="btm-nav-label">Map View</span>
+  </button>
+  <button className="active bg-secondary text-base-100 border-blue-600">
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    <span className="btm-nav-label">Tab View</span>
+  </button>
+  
+</div>
     </GoogleMap>
   ) : (
     <Loader></Loader>
