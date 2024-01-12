@@ -11,7 +11,7 @@ import img from "../assets/react.svg";
 import "../css/MapView.css";
 import axios from "axios";
 import api from "../api/api";
-import mark from "../assets/mark.svg";
+import mark from "../assets/marker.svg";
 import current from "../assets/current.svg";
 import Loader from "../components/Loader";
 import MarkerLabel from "../components/MarkerLabel";
