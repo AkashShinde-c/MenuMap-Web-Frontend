@@ -15,6 +15,7 @@
   flex-direction: row;
   align-items: center;
   box-sizing: border-box;
+  height: inherit;
   padding-left:1rem
 }
 
@@ -24,6 +25,7 @@
   /* justify-content: flex-end; */
   align-items: flex-end;
   box-sizing: border-box;
+  height: inherit;
   /* padding: 1rem; */
 }
 
@@ -100,11 +102,12 @@
   }
   .right-nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     /* justify-content: flex-end; */
-    align-items: flex-end;
+    align-items: center;
+    justify-content: flex-end;
     box-sizing: border-box;
-    padding: 1rem;
+    padding-right: 1rem;
   }
 
   .ham-burger {
@@ -128,7 +131,7 @@
   .menu-show {
     position: absolute;
      
-    top: 3rem;
+    top: calc(100% + 1.5rem);
     background-color: #27005D;
     background-color: transparent;
     height: 30vh;
