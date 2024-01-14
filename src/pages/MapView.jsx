@@ -75,6 +75,7 @@ const MapView = () => {
         elementType: "labels",
         stylers: [{ visibility: "off" }],
       },
+      
     ],
   };
 
@@ -106,8 +107,8 @@ const MapView = () => {
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={{ width: "100%", height: "100%" }}
-      center={position}
-      // center={currentLocation}
+      // center={position}
+      center={currentLocation}
       zoom={17.6}
       options={mapOptions}
     >
