@@ -27,6 +27,7 @@ const MapView = () => {
   const [menu, setMenu] = useState("");
   const [currentLocation, setCurrentLocation] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [center, setCenter] = useState(null);
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -63,6 +64,13 @@ const MapView = () => {
         console.error("Error getting user's location:", error);
       }
     );
+
+    navigator.geolocation.getCurrentPosition((position) => {
+      setCenter({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+    });
   }, [window.google]);
 
   const mapOptions = {
@@ -75,7 +83,6 @@ const MapView = () => {
         elementType: "labels",
         stylers: [{ visibility: "off" }],
       },
-      
     ],
   };
 
@@ -108,7 +115,7 @@ const MapView = () => {
     <GoogleMap
       mapContainerStyle={{ width: "100%", height: "100%" }}
       // center={position}
-      center={currentLocation}
+      center={center}
       zoom={17.6}
       options={mapOptions}
     >
@@ -182,7 +189,6 @@ const MapView = () => {
           </div>
         </InfoWindow>
       )}
-      
     </GoogleMap>
   ) : (
     <Loader></Loader>
