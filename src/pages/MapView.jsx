@@ -46,7 +46,8 @@ const MapView = () => {
       try {
         const response = await api.get("/get-menu-data");
         console.log(response.data.menu_data);
-        setMarkers(response.data.menu_data);
+        const updatedMenus = response.data.menu_data.filter(menu =>  isUpdated(menu.date));
+        setMarkers(updatedMenus);
       } catch (error) {
         alert(error.message);
       }
@@ -83,6 +84,11 @@ const MapView = () => {
         elementType: "labels",
         stylers: [{ visibility: "off" }],
       },
+      {
+        featureType: "transit",
+        stylers: [{ visibility: "off" }]
+      },
+   
     ],
   };
 
@@ -110,6 +116,18 @@ const MapView = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const isUpdated = (time) => {
+    console.log(time)
+    const receivedTime = new Date(time);
+    const currentTime = new Date();
+
+    const timeDifferenceInMilliseconds = currentTime - receivedTime;
+    const timeDifferenceInHours =
+      timeDifferenceInMilliseconds / (1000 * 60 * 60);
+      console.log(timeDifferenceInHours)
+    return timeDifferenceInHours < 3.5;
   };
   return isLoaded ? (
     <GoogleMap
