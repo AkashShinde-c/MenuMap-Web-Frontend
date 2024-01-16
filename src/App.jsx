@@ -7,6 +7,7 @@ import MapView from "./pages/MapView";
 import Navbar from "./components/Navbar";
 import Tutorial from "./pages/Tutorial";
 import PrivateRoutes from "./utils/PrivateRoutes";
+import TabView from "./pages/TabView";
 
 function App() {
   
@@ -18,6 +19,7 @@ function App() {
       <Route path="/" element={<MapView/>}/>
       </Route>
       <Route path="/get-started" element={<Tutorial/>}/>
+      <Route path="/tabview" element={<TabView />} />
      </Routes>
      </div>
     
