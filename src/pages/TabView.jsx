@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from "../api/api";
 import axios from 'axios';
-import Loader from "../components/Loader";
 
 const TabView = () => {
   const [menuData, setMenuData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
 
@@ -41,7 +39,6 @@ const TabView = () => {
 
   const loadImage = async (index) => {
     try {
-      setIsLoading(true);
       const response1 = await api.get(
         `/get-image-url?img_name=${menuData[index].menu_image_url}`
       );
@@ -55,8 +52,6 @@ const TabView = () => {
       });
     } catch (error) {
       console.error('Error loading image:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -73,41 +68,44 @@ const TabView = () => {
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
-
-    // Add a delay of 300 milliseconds before triggering the filter
-    
   };
 
   return (
-    <div className="space-y-4">
-      <input
-    type="search"
-    class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-black dark:focus:border-primary"
-    value={search}
-    onChange={handleSearchChange}
-    placeholder="Enter Mess Name" 
-    autoComplete='off'
-    />
-
-
-      {filteredData.map((item, index) => (
-        <div key={index} className="bg-gray-300 p-4 flex flex-col items-center">
-          <div className="flex items-center justify-between w-full">
-            <div>
-              <p className="text-lg font-semibold">{item.mess_name}</p>
+    <div className='bg-gray-300 min-h-screen'>
+      <div className="space-y-4 mt-3 max-w-screen-xl mx-auto">
+        {/* Search Input */}
+        <div className='max-w-md mx-auto'>
+          <div className='relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg overflow-hidden'>
+            <div className="grid place-items-center h-full w-12 ">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </div>
-            <div>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={() => { toggleImage(index); loadImage(index); }}
-              >
-                {item.showImage ? 'Hide Image' : 'Show Menu'}
-              </button>
+            <input
+              type="search"
+              className="peer h-full w-full outline-none text-sm text-gray-700 pr-2 bg-gray-300"
+              value={search}
+              onChange={handleSearchChange}
+              placeholder="Enter Mess Name"
+              autoComplete='off'
+            />
+          </div>
+        </div>
+
+        {/* Display Menu Items */}
+        {filteredData.map((item, index) => (
+          <div key={index} className="bg-gray-200 p-4 flex flex-col items-center rounded-2xl shadow-lg">
+            <div className="w-full h-full cursor-pointer" onClick={() => { toggleImage(index); loadImage(index); }}>
+              <div className="flex flex-col items-center justify-center h-full">
+                <p className="text-lg font-semibold">{item.mess_name}</p>
+                <div className="mt-4">
+                  {item.showImage && <img className="w-64 h-70" src={item.selectedImage} alt="" style={{ objectFit: 'contain' }} />}
+                </div>
+              </div>
             </div>
           </div>
-          {isLoading ? <Loader /> : item.showImage && <img className="w-64 h-64 mt-4" src={item.selectedImage} alt="" />}
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
