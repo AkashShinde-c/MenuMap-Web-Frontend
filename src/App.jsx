@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import MapView from "./pages/MapView";
 import Navbar from "./components/Navbar";
 import Tutorial from "./pages/Tutorial";
+import TabView from './pages/TabView'
 import PrivateRoutes from "./utils/PrivateRoutes";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       </Route> */}
       <Route path="/" element={<MapView/>}/>
       <Route path="/get-started" element={<Tutorial/>}/>
+      <Route path="/tabview" element={<TabView/>}/>
      </Routes>
      </div>
     
