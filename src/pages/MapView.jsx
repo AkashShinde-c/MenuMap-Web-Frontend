@@ -150,9 +150,8 @@ const MapView = () => {
     const timeDifferenceInMilliseconds = currentTime - receivedTime;
     const timeDifferenceInHours =
       timeDifferenceInMilliseconds / (1000 * 60 * 60);
-    console.log(timeDifferenceInHours);
+      console.log(timeDifferenceInHours)
     return timeDifferenceInHours < 3.5;
- 
   };
   return isLoaded ? (
     <GoogleMap
