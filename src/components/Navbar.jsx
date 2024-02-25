@@ -8,11 +8,14 @@ import about from "../assets/about.png";
 import About from "./About";
 import MyContext from "../context/MyContext";
 import notes from "../assets/notes.png"
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { showAbout, updateValue } = useContext(MyContext);
   const chceckboxRef = useRef();
+
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -22,10 +25,15 @@ const Navbar = () => {
     <nav className="navbar-custom" id="navbar-custom">
       {showAbout && <About />}
       <div className="left-nav">
-        <div className="logo">
-          <img src={logo_round} alt="logo" />
-          <span>Menu Map</span>
-        </div>
+      <div className="logo cursor-pointer" onClick={() => navigate('/')}>
+  <img src={logo_round} alt="logo" />
+  <span className="mr-2">Menu Map</span> {/* Adding margin-right utility class */}
+</div>
+<div>
+  <p className="cursor-pointer font-bold text-white" onClick={() => navigate('/tabview')}>
+    Tab View
+  </p>
+</div>
       </div>
       <div className="right-nav">
         
