@@ -14,9 +14,9 @@ function App() {
      <div className="App">
      <Navbar></Navbar>
      <Routes>
-      <Route element={<PrivateRoutes/>}>
+      {/* <Route element={<PrivateRoutes/>}>
+      </Route> */}
       <Route path="/" element={<MapView/>}/>
-      </Route>
       <Route path="/get-started" element={<Tutorial/>}/>
      </Routes>
      </div>

@@ -28,6 +28,7 @@ const MapView = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [center, setCenter] = useState(null);
+  const [openMarker, setOpenMarker] = useState();
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -46,32 +47,55 @@ const MapView = () => {
       try {
         const response = await api.get("/get-menu-data");
         console.log(response.data.menu_data);
-        const updatedMenus = response.data.menu_data.filter(menu =>  isUpdated(menu.date));
+        const updatedMenus = response.data.menu_data.filter((menu) =>
+          isUpdated(menu.date)
+        );
+        console.log(updatedMenus);
         setMarkers(updatedMenus);
       } catch (error) {
         alert(error.message);
       }
     })();
-
-    // Use Geolocation API to get the user's current position
-    const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        setCurrentLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      },
-      (error) => {
-        console.error("Error getting user's location:", error);
-      }
-    );
-
-    navigator.geolocation.getCurrentPosition((position) => {
-      setCenter({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
+    //see if location permission is granted
+    navigator.permissions
+      .query({ name: "geolocation" })
+      .then((result) => {
+        if (result.state === "granted") {
+            //Set current location as center
+            navigator.geolocation.getCurrentPosition((position) => {
+              setCenter({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              });
+            });
+          // Use Geolocation API to get the user's current position
+          const watchId = navigator.geolocation.watchPosition(
+            (position) => {
+              setCurrentLocation({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              });
+            },
+            (error) => {
+              window.alert("Error getting location");
+            }
+          );
+        }
+        else{
+           //Set current location as center
+           navigator.geolocation.getCurrentPosition((position) => {
+            setCenter({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
+          });
+        }
+      })
+      .catch((error) => {
+        window.alert("Location not available: " );
       });
-    });
+
+ 
   }, [window.google]);
 
   const mapOptions = {
@@ -86,9 +110,8 @@ const MapView = () => {
       },
       {
         featureType: "transit",
-        stylers: [{ visibility: "off" }]
+        stylers: [{ visibility: "off" }],
       },
-   
     ],
   };
 
@@ -110,6 +133,7 @@ const MapView = () => {
         lat: parseFloat(marker.location?.lat),
         lng: parseFloat(marker.location?.lng),
       });
+      setOpenMarker(marker);
       setInfoWindowOpen(!infoWindowOpen);
     } catch (error) {
       alert("Somthing went wrong");
@@ -119,25 +143,26 @@ const MapView = () => {
   };
 
   const isUpdated = (time) => {
-    console.log(time)
+    console.log(time);
     const receivedTime = new Date(time);
     const currentTime = new Date();
 
     const timeDifferenceInMilliseconds = currentTime - receivedTime;
     const timeDifferenceInHours =
       timeDifferenceInMilliseconds / (1000 * 60 * 60);
-      console.log(timeDifferenceInHours)
+    console.log(timeDifferenceInHours);
     return timeDifferenceInHours < 3.5;
   };
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={{ width: "100%", height: "100%" }}
-      // center={position}
-      center={center}
+      center={center||position}
+      
       zoom={17.6}
       options={mapOptions}
     >
       {isLoading && <Loader></Loader>}
+
       {markers &&
         markers.map((marker) => (
           <Fragment key={marker._id}>
@@ -200,10 +225,22 @@ const MapView = () => {
         <InfoWindow
           position={position}
           onCloseClick={() => setInfoWindowOpen(false)}
+          options={{
+            backgroundColor: "red",
+            border: "2px solid black",
+            padding: "100px",
+          }}
         >
-          <div className="infoWindow">
-            <h3>Todays Menu</h3>
-            <img src={menu} alt="" />
+          <div className="infoWindow flex flex-col gap-3 ounded-lg  ">
+            <div className=" flex items-center justify-between">
+              <h2 className=" text-[1.2rem] font-bold">
+                {openMarker.mess_name}
+              </h2>
+              <div className=" font-bold text-green-600">
+                {openMarker.last_updated}
+              </div>
+            </div>
+            <img src={menu} alt="Menu" className=" rounded-lg" />
           </div>
         </InfoWindow>
       )}
